@@ -1,7 +1,5 @@
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.Set;
 
 public class FileSystemSimulator {
@@ -16,12 +14,13 @@ public class FileSystemSimulator {
     }
 
     public File createFile(String path) {
-        String[] spltPath = path.split("/");
+        ArrayList<String> arrayPath = new ArrayList<>(Arrays.asList(path.split("/")));
+        String fileName = arrayPath.remove(arrayPath.size()-1);
         
-        Directory dir = findDirectory(path);
+        Directory dir = getDirectory(arrayPath, root);
         if (dir == null) return null;
 
-        File newFile = new File(spltPath[spltPath.length-1]);
+        File newFile = new File(fileName);
 
         this.disk.add(newFile);
         dir.addFile(newFile.name, this.disk.indexOf(newFile));
@@ -32,12 +31,13 @@ public class FileSystemSimulator {
     }
 
     public Directory createDir(String path) {
-        String[] spltPath = path.split("/");
+        ArrayList<String> arrayPath = new ArrayList<>(Arrays.asList(path.split("/")));
+        String dirName = arrayPath.remove(arrayPath.size()-1);
         
-        Directory dir = findDirectory(path);
+        Directory dir = getDirectory(arrayPath, root);
         if (dir == null) return null;
 
-        Directory newDir = new Directory(spltPath[spltPath.length-1]);
+        Directory newDir = new Directory(dirName);
 
         this.disk.add(newDir);
         dir.addFile(newDir.name, this.disk.indexOf(newDir));
@@ -155,10 +155,7 @@ public class FileSystemSimulator {
 
         if (path.size() == 0) return dir;
 
-        if (dir == null) {
-            System.out.println("Diretório não encontrado.");
-            return null;
-        }
+        if (dir == null) return null;
         
         try {
             dirName = path.remove(0);

@@ -8,51 +8,64 @@ public class Extra3sh {
     }
 
     public void execCommand(String input) {
-        String[] splited = input.split(" ");
-        String command = null;
-        
-        command = splited[0];
 
-        switch (command) {
-            case "touch":
-                this.fileSystemSimulator.createFile(splited[1]);
-                break;
-            
-            case "cp":
-                this.fileSystemSimulator.copyFile(splited[1], splited[2]);
-                break;
-            
-            case "rm":
-                this.fileSystemSimulator.removeFile(splited[1]);
-                break;
+        try {
 
-            case "mkdir":
-                this.fileSystemSimulator.createDir(splited[1]);
-                break;
+            String[] splited = input.split(" ");
+            String command = null;
             
-            case "rmdir":
-                this.fileSystemSimulator.removeDir(splited[1]);
-                break;
-            
-            case "rnm":
-                this.fileSystemSimulator.renameFile(splited[1], splited[2]);
-                break;
-            
-            case "ls":
-                this.fileSystemSimulator.listDirectory(splited[1]);
-                break;
+            command = splited[0];
+    
+            switch (command) {
+                case "touch":
+                    this.fileSystemSimulator.createFile(splited[1]);
+                    break;
+                
+                case "cp":
+                    this.fileSystemSimulator.copyFile(splited[1], splited[2]);
+                    break;
+                
+                case "rm":
+                    this.fileSystemSimulator.removeFile(splited[1]);
+                    break;
+    
+                case "mkdir":
+                    this.fileSystemSimulator.createDir(splited[1]);
+                    break;
+                
+                case "rmdir":
+                    this.fileSystemSimulator.removeDir(splited[1]);
+                    break;
+                
+                case "rnm":
+                    this.fileSystemSimulator.renameFile(splited[1], splited[2]);
+                    break;
+                
+                case "ls":
+                    System.out.println(this.fileSystemSimulator.listDirectory(splited[1]));
+                    break;
+    
+                default:
+                    System.out.println(String.format("extra3sh: command not found: %s", command));
+            }
 
-            default:
-                System.out.println(String.format("extra3sh: command not found: %s", command));
+        }catch (Exception e) {
+            System.out.println(e.getMessage());
         }
     }
 
     public void init(){
         Scanner scan = new Scanner(System.in);
         while (true) {
-            String command = scan.nextLine();
-            if (command.equals("exit")) break;
-            execCommand(command);
+            try{
+                String command = scan.nextLine();
+                if (command.equals("exit")) break;
+                execCommand(command);
+            }
+            catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+            
         }
     }
 }
